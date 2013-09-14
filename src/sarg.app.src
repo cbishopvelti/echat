@@ -1,0 +1,22 @@
+%% -*- mode: Erlang; fill-column: 75, comment-column: 50; -*-
+
+{application, sarg, [
+	{description, "sarging app"},
+	{vsn, "0.1.0"},
+	{modules, [
+		sarg_app, 
+		sarg_sup,
+		sarg_srv,
+		room_srv, 
+		room_sup, 
+		websocket,
+		websocket_sup,
+		websocket_srv, 
+		websocket_evt, 
+		mochijson2,
+		gproc
+	]},
+	{registered, [sarg]},
+	{applications, [kernel, stdlib, inets]},
+	{mod, {sarg_app,[]}}
+]}.	

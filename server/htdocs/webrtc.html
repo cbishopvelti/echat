@@ -1,0 +1,40 @@
+<html>
+	<head>
+		<script type="text/javascript" src="./vendor/jquery-1.9.1.js"></script>
+		<script type="text/javascript" src="./js/src/utils/WebRTCAdaptor.js"></script>
+		<script type="text/javascript" src="./vendor/underscore.js"></script>
+		<script type="text/javascript" src="./vendor/backbone.js"></script>
+		<script type="text/javascript" src="./js/src/utils/Function.js"></script> <!-- create delegate implementation -->
+
+		<script type="text/javascript" src="./js/src/App.js"></script> <!-- our websocket -->
+
+		<script type="text/javascript" src="./js/src/models/WebRTC.js"></script>
+		<script type="text/javascript" src="./js/src/models/WebRTCClient.js"></script>
+		<script type="text/javascript" src="./js/src/models/WebRTCServer.js"></script>
+
+
+		<script type="text/javascript" src="./js/src/WebRTCApp.js"></script>
+		<style type="text/css">
+			video {
+				height: 160px;
+				width: 160px;
+			}
+		</style>
+
+
+	</head>
+
+	<body>
+		<div id="app">
+			<div id="videos">
+				
+				<!-- videos get added dynamicaly -->
+				<!-- <video id="local"></video>
+				<video id="remote"></video> -->
+			</div>
+			<div id="mes">
+				<video id="me" autoplay="true" muted="true"></video>
+			</div>
+		</div>
+	</body>
+</html>

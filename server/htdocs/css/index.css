@@ -1,0 +1,26 @@
+
+#out {
+	box-sizing:border-box;
+	-moz-box-sizing:border-box;
+	width: 100%;
+	/*height: -moz-calc(100% - 60px);*/
+	height: 80%;
+	height: calc(100% - 50px);
+	overflow-y:scroll;
+	
+	border: 1px solid gray;
+}
+
+#input {
+	box-sizing:border-box;
+	-moz-box-sizing:border-box;
+	vertical-align: middle;
+	width: 90%;
+	width: calc(100% - 70px);
+	
+}
+
+body {
+	padding: 0;
+	margin: 0;
+}
