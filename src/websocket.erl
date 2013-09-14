@@ -1,6 +1,7 @@
 -module(websocket).
 -export([ handshake_and_talk/1,
 	demask/2,
+	demask/3, %% debug
 	demask2/2, %% debug
 	talk/2
 ]).
@@ -32,7 +33,7 @@ talk(Pid, Out) ->
 
 	OutSize = websocket_length(Out2), 
 	Pid ! {send, self(), << 16#81, OutSize/binary, Out2/binary >>},
-	{ok}. % I think this process dies, as we don't recurse
+	{ok}.
 	
 websocket_length(Bin) -> 
 	if 
@@ -51,6 +52,7 @@ websocket_length(Bin) ->
 		true
 			-> 
 				% TODO: implement fragmented messages, but will never happen
+				% unless someone wants to send a message > 16#7FFFFFFFFFFFFFFF
 				error
 	end.
 		
@@ -86,9 +88,9 @@ demask(<<H:8/integer, S:16/integer-unsigned, T/binary>>, SState) when (16#7f ban
 	demask(S, T, SState);
 demask(<<H:8/integer, S:64/integer-unsigned, T/binary>>, SState) when (16#7f band H) == 127 ->
 	demask(S, T, SState);
-demask(<< _T/binary >>, _SState) -> % if the above doesn't match, then our header has probably been split into multiple tcp packages and we need to buffer
+demask(<< _T/binary >>, SState) -> % if the above doesn't match, then our header has probably been split into multiple tcp packages and we need to buffer
 	io:format("demask/2: buffer~n", []),
-	buffer
+	{buffer, SState}
 .
 
 
@@ -121,6 +123,9 @@ demask(Size, <<Mask:4/binary, Data/binary>>, SState) when (byte_size(Data) > Siz
 	;
 demask(Size, <<_Mask:4/binary, Data/binary>>, SState) when (byte_size(Data) < Size) -> % the data is accross multiple packets
 	{ buffer, SState }
+	;
+demask(_Size, <<_Stuff/binary>>, SState) -> % havent even recieved the full header
+	{ buffer, SState }
 	.
 
 %% actualy does the demasking
@@ -135,7 +140,6 @@ demask2(<<Mask:4/binary>>, <<H:4/binary, T/binary>>) ->
 	Out2 = binary_to_list(<< Out:32/integer >>),
 
 	Out2 ++ demask2(Mask, T);
-	%string:concat( Out3, demask2(Mask, T) );
 
 demask2(<<Mask:4/binary>>, <<End/binary>>) when (size(End) > 0 ) -> 
 	
