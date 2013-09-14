@@ -14,4 +14,6 @@
 
 4) start the application: appliaction:start(sarg).</br>
 
+5) Open the app in your browser (chrome only) on two comptures/browser tabs: [ip address]:8080/webrtc.html
+
 </p>
