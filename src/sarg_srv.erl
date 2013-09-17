@@ -45,7 +45,6 @@ handle_info(timeout, _State) ->
 		{security_log, "security.log"},
 		{transfer_log, "transfer.log"},
 		{bind_address, 
-			% {10,0,18,12}
 			{0,0,0,0}
 		},
 		{mime_types, [

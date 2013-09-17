@@ -1,8 +1,6 @@
 -module(websocket).
 -export([ handshake_and_talk/1,
 	demask/2,
-	demask/3, %% debug
-	demask2/2, %% debug
 	talk/2
 ]).
 	
@@ -104,16 +102,13 @@ demask(Size, <<Mask:4/binary, Data/binary>>, SState) when (byte_size(Data) > Siz
 
 	{noreply, SState2} = websocket_srv:handle_info({tcp, null, <<Rest/binary>>}, SState),	
 
-	% send the rest of the message to be proccessed
-	% self() ! {tcp, null, <<Rest/binary>>},
-
 	% demask2(Mask, ToDecode)
 	{demask2(Mask, ToDecode), SState2}
 	;
 demask(Size, <<_Mask:4/binary, Data/binary>>, SState) when (byte_size(Data) < Size) -> % the data is accross multiple packets
 	{ buffer, SState }
 	;
-demask(_Size, <<_Stuff/binary>>, SState) -> % havent even recieved the full header
+demask(_Size, <<_Stuff/binary>>, SState) -> % haven't even recieved the full header
 	{ buffer, SState }
 	.
 

@@ -27,8 +27,6 @@ init([]) ->
 
 	gen_event:start_link({local, websocket_man}),
 	gen_event:add_handler(websocket_man, websocket_evt, [self(), L]),
-	% tell the websocket_man that we have had a connection added
-	% gen_event:notify(websocket_man, websocket_connected),
 
 	{ok, {RestartStrategy, Children}}
 	.

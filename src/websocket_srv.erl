@@ -123,13 +123,6 @@ handle_info(timeout, {L, Callback, Buff}) ->
 	HsPid = spawn(fun() -> websocket:handshake_and_talk(Pid) end),
 	{noreply, {S, Callback, Buff, {handshake, HsPid}}}
 .
-% handle_info(Call, {S, Callback, Buff}) -> 
-% 	% pass to the callback function
-% 	{Cb, Cb_state} = Callback,
-% 	{Reply, Cb_state2} = Cb:handle_info(Call, Cb_state),
-% 	{Reply, {S, { Cb, Cb_state2 }, Buff}}
-% .
-
 
 code_change(_OldVsn, State, _Extra) -> 
 	{noreply, State}.
