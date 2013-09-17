@@ -8,7 +8,6 @@
 ]).
 
 start(_Type, _StartArgs) ->
-	io:format("sarg_app: start ~p~n", [self()]),
 	sarg_sup:start_link()
 	.
 	

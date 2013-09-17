@@ -11,7 +11,6 @@ start_link() ->
 	supervisor:start_link({local, ?SERVER}, ?MODULE, []).
 
 init([]) -> 
-	io:format("sarg_sup: init ~n", []),
 	Sarg_srv = {sarg_srv, 
 		{sarg_srv, start_link, []},
 		permanent, 

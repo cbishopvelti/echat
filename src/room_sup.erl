@@ -11,7 +11,6 @@ start_link() ->
 	Link.
 
 init([]) ->
-	io:format("room_sup: init~n", []), 
 	Home_room = {home_sup, %room name
 		{room_srv, start_link, [home]},
 		permanent,

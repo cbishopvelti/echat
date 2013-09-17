@@ -89,30 +89,19 @@ demask(<<H:8/integer, S:16/integer-unsigned, T/binary>>, SState) when (16#7f ban
 demask(<<H:8/integer, S:64/integer-unsigned, T/binary>>, SState) when (16#7f band H) == 127 ->
 	demask(S, T, SState);
 demask(<< _T/binary >>, SState) -> % if the above doesn't match, then our header has probably been split into multiple tcp packages and we need to buffer
-	io:format("demask/2: buffer~n", []),
 	{buffer, SState}
 .
 
 
 %% demask/3 after we know the size
 demask(Size, <<Mask:4/binary, Data/binary>>, SState) when (byte_size(Data) == Size) -> 
-	io:format("========================== demask/3 001 size: ~p ~n", [Size]), 
 
 	{demask2(Mask, Data), SState} %% actualy do the demasking
 	;
 demask(Size, <<Mask:4/binary, Data/binary>>, SState) when (byte_size(Data) > Size) -> % chrome can send 2 websocket packets together
-	
-	%<<ToDecode:Test/binary, Rest/binary>> = <<Data/binary>>,
-
-	% io:format("demask size: ~p actualSize: ~p~n", [Size, byte_size(Data)]),
-
-
-	io:format("size: ~p, actual size ~p, mask: ~p~n", [Size, byte_size(Data), Mask]),
-	io:format("========================== demask/3 002 ~n", []), 
 
 	<<ToDecode:Size/binary, Rest/binary>> = <<Data/binary>>,
 
-	io:format("websocket: demaskc -> websocket_srv:handle_info~n", []),
 	{noreply, SState2} = websocket_srv:handle_info({tcp, null, <<Rest/binary>>}, SState),	
 
 	% send the rest of the message to be proccessed

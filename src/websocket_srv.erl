@@ -95,7 +95,7 @@ handle_info({tcp, _Socket, RawData}, {S, Callback, Buff, {handshake, Child}}) ->
 
 	if
 		_Socket == null ->
-			io:format("null null null null null null null null~n", []);
+			ok;
 		true -> 
 			ok
 	end,
@@ -132,5 +132,4 @@ handle_info(timeout, {L, Callback, Buff}) ->
 
 
 code_change(_OldVsn, State, _Extra) -> 
-	io:format("websocket_srv: code_change ~n"),
 	{noreply, State}.

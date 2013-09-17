@@ -9,13 +9,10 @@
 -define(SERVER, ?MODULE).
 
 start_link() ->
-	Link = supervisor:start_link({local, ?SERVER}, ?MODULE, []),
-	io:format("websocket_sup: start_link, pid: ~p~n", [Link]),
-	Link
+	supervisor:start_link({local, ?SERVER}, ?MODULE, [])
 	.
 
 init([]) -> 	
-	io:format("websocket_sup: init 1 ~p~n", [self()]),
 	{ok, L} = gen_tcp:listen( 
 		8079, 
 		[binary, 
@@ -28,7 +25,6 @@ init([]) ->
 	Children = [Server], 
 	RestartStrategy = {one_for_one, 0, 1},
 
-	io:format("websocket_sup: init 2, self: ~p~n", [self()]),
 	gen_event:start_link({local, websocket_man}),
 	gen_event:add_handler(websocket_man, websocket_evt, [self(), L]),
 	% tell the websocket_man that we have had a connection added
@@ -38,7 +34,6 @@ init([]) ->
 	.
 
 get_spec(L) -> 
-	io:format("websocket_sup: get_spec ~p~n", [L]),
 	{make_ref(), %name
 		{sarg_websocket_cb, start_link, [L]}, %start child 
 		temporary, %temporary, permanant, transiant.

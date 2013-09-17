@@ -11,16 +11,11 @@
 
 -define(SERVER, ?MODULE).
 
-% stop(Pid) ->
-% 	inets:stop(httpd, Pid)
-% .
-
 start_link() ->
 	gen_server:start_link({local, ?SERVER}, ?MODULE, [], [])
 .
 
 stop() -> 
-	io:format("sarg_srv: stop", []),
 	ok
 .
 	
@@ -61,14 +56,10 @@ handle_info(timeout, _State) ->
 	.
 % if we terminate, stop inets.
 terminate(_Reason, {Pid}) -> 
-	io:format("sarg_srv: terminate~n", []),
 	inets:stop(httpd, Pid),
 	ok.
 
-service(SessionID, _Env, Input) -> 
-	io:format("session id: ~p~n", [SessionID]),
-	io:format("Input: ~p, ~p~n", [Input, _Env]),
-
+service(SessionID, _Env, _Input) -> 
 
 	mod_esi:deliver(SessionID, [
 		"Host: localhost\r\n\r\n
